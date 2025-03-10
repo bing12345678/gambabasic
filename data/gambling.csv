@@ -1,0 +1,12 @@
+id,date,website,win,machine,free_win,free_win_m,note,free_win_machine,Unnamed: 9,start_amount,end_amount,f_start_amount,f_end_amount,user,profit
+2,07-03-2025,888casino,32.0,,0.0,0,only user2 should see this,,,0.0,0.0,,,user2,32.0
+4,06-03-2025,888casino,0.0,,0.0,0,only user2 should see this,,,0.0,0.0,,,user2,0.0
+6,08-03-2025,Betano,48.0,Valhalla: Wild Winter,40.0,0,,,,232.0,280.0,,,,88.0
+7,08-03-2025,888casino,32.0,,23.0,,,,,0.0,0.0,,,,55.0
+8,08-03-2025,888casino,32.0,Uncharted,32.0,Kanoturen,,,,0.0,0.0,,,,64.0
+12,2025-03-09,Betano,12.0,,0.0,32,12,,,0.0,0.0,,,user1,12.0
+13,2025-03-09,Betano,32.0,,0.0,23,32,,,0.0,0.0,,,user1,32.0
+14,2025-03-09,Bet25,432.0,,43.0,0,475,,,0.0,0.0,,,user1,475.0
+15,2025-03-09,Bet365,82.0,Kanoturen,25.0,0,107,,,1283.0,1291.0,,,user1,107.0
+16,2025-03-09,Bet25,85.0,Gates of Olympus,0.0,153,85,,,250.0,258.0,,,user1,85.0
+17,2025-03-10,Bet25,4.0,,2.0,test,works now asdadsasd,,,0.0,0.0,,,user1,6.0

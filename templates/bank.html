@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Gambling Tracker{% endblock %}
+
+{% block content %}
+    <div class="container mt-4">
+        <!-- Balance Cards -->
+        <div class="card mb-4">
+            <div class="card-header text-center">
+                <h5>Balance</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card balance-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Gambling Profit</h5>
+                                <h3 class="card-text {% if balance.gambling_profit >= 0 %}positive{% else %}negative{% endif %}">
+                                    {{ balance.gambling_profit|round(2) }}
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card balance-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Deposits</h5>
+                                <h3 class="card-text {% if balance.bank_balance >= 0 %}positive{% else %}negative{% endif %}">
+                                    {{ balance.bank_balance|round(2) }}
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card balance-card">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Balance</h5>
+                                <h3 class="card-text {% if balance.total_balance >= 0 %}positive{% else %}negative{% endif %}">
+                                    {{ balance.total_balance|round(2) }}
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Add Transaction Form -->
+        <div class="card mb-4">
+            <div class="card-header text-center">
+                <h5>New Transaction</h5>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('bank') }}" method="post" class="row g-3">
+                    <div class="col-md-3">
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date" name="date" value="{{ today }}" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="type" class="form-label">Type</label>
+                        <select class="form-select" id="type" name="type" required>
+                            <option value="deposit">Deposit</option>
+                            <option value="withdrawal">Withdrawal</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="amount" class="form-label">Amount</label>
+                        <input type="number" step="0.01" class="form-control" id="amount" name="amount" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="site" class="form-label">Site</label>
+                        <select class="form-control select2" id="site" name="site" required>
+                            <option value="">Select a site</option>
+                            {% for site in sites %}
+                                <option value="{{ site }}">{{ site }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-12 mt-3">
+                        <button type="submit" class="btn btn-primary">Add Transaction</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        
+        <!-- Transaction History -->
+    <div class="card mb-4"> 
+        <div class="card"> 
+            <div class="card-header text-center"> 
+                <h5>Transaction History</h5> 
+                <div> 
+                    <button id="undo-btn" class="btn btn-sm btn-outline-secondary">Undo</button> 
+                    <button id="redo-btn" class="btn btn-sm btn-outline-secondary">Redo</button> 
+                </div> 
+            </div> 
+            <!-- Add a card-body div with defined height -->
+            <div class="card-body p-0">
+                <div id="bank-table" class="ht-theme-main"></div> 
+            </div>
+        </div> 
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/styles/handsontable.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/styles/ht-theme-main.min.css" />
+    <style>
+        .hot-container {
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+        }
+        .handsontable .deposit {
+            background-color: rgba(0, 255, 0, 0.1);
+        }
+        .handsontable .withdrawal {
+            background-color: rgba(255, 0, 0, 0.1);
+        }
+    </style>
+{% endblock %}
+
+{% block extra_body %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
+    <script src="{{ url_for('static', filename='js/bank.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+{% endblock %}

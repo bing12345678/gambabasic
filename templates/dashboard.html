@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <script src="https://handsontable.com/docs/9.0.0/handsontable.full.min.js"></script>
+    <link rel="stylesheet" href="https://handsontable.com/docs/9.0.0/handsontable.full.min.css">
+    <script src="script.js"></script> <!-- Make sure this file includes initializeHandsontable() -->
+</head>
+<body>
+    <h2>Welcome, {{ user_code }}</h2>
+    <a href="{{ url_for('gambling') }}">Gambling</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+    
+    <div id="gamble-table"></div> <!-- Handsontable will be placed here -->
+</body>
+</html>

@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}Gambling Tracker{% endblock %}
+
+{% block content %}
+<!-- Add Gamble Form -->
+    <div class="container mt-4">
+        <div class="card mb-4">
+            <div class="card-header text-center">
+                <h5>New Gamble</h5>
+            </div>
+            <div class="card-body">
+                <form id="form-add-gamble" action="{{ url_for('gambling') }}" method="post" class="row g-3">
+
+                <!-- Date -->
+                <div class="row">
+                    <div class="col-md-6 mx-auto" >
+                        <label for="date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="date" name="date" value="{{ today }}" required>
+                    </div>
+                </div>
+
+                <!-- New Row for Website -->
+                <div class="row">
+                    <div class="col-md-6 mx-auto" >
+                        <label for="website" class="form-label">Website</label>
+                        <select class="form-select select2" id="website" name="website" required>
+                            <option value="">Select a website</option>
+                            {% for website in websites %}
+                                <option value="{{ website }}">{{ website }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <!-- Machine, Win Amount, Start Amount, End Amount -->
+                    <div class="col-md-2">
+                        <label for="win" class="form-label">Win</label>
+                        <input type="number" step="0.01" class="form-control" id="win" name="win">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="start_amount" class="form-label">Start</label>
+                        <input type="number" step="0.01" class="form-control" id="start_amount" name="start_amount">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="end_amount" class="form-label">End</label>
+                        <input type="number" step="0.01" class="form-control" id="end_amount" name="end_amount">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="machine" class="form-label">Machine</label>
+                        <select class="form-select select2" id="machine" name="machine">
+                            <option value="">(Optional) No Machine</option>
+                            {% for machine in machines %}
+                                <option value="{{ machine }}">{{ machine }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                
+                
+                    <!-- Free Win Machine & Free Win -->
+                <div class="row justify-content-center">
+
+                    <div class="col-md-2">
+                        <label for="free_win" class="form-label">Free Win</label>
+                        <input type="number" step="0.01" class="form-control" id="free_win" name="free_win" value="0">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="start_amount" class="form-label">Start</label>
+                        <input type="number" step="0.01" class="form-control" id="f_start_amount" name="start_amount">
+                    </div>
+                    <div class="col-md-2">
+                        <label for="end_amount" class="form-label">End</label>
+                        <input type="number" step="0.01" class="form-control" id="f_end_amount" name="end_amount">
+                    </div>
+                    <div class="col-md-2 ">
+                        <label for="free_win_m" class="form-label">Free Win Machine</label>
+                        <select class="form-select select2" id="free_win_m" name="free_win_m">
+                            <option value="">(Optional) No Machine</option>
+                            {% for machine in machines %}
+                                <option value="{{ machine }}">{{ machine }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                    <!-- Note -->
+                    <div class="col-md-6 mx-auto" style="max-width: 600px;">
+                        <label for="note" class="form-label">Note</label>
+                        <textarea class="form-control" id="note" name="note" rows="3"></textarea>
+                    </div>
+
+                    <!-- Hidden ID field (for editing existing gambles) -->
+                    <input type="hidden" id="id" name="id" value="">
+
+                    <!-- Submit Button -->
+                    <div class="col-12 mt-3 text-center">
+                        <button type="submit" class="btn btn-primary">Add Gamble</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+    <div class="card mb-4">
+        <div class="card">
+            <div class="card-header text-center">
+                <h5>Gambling Data</h5>
+                <div> 
+                    <button id="undo-btn" class="btn btn-sm btn-outline-secondary">Undo</button> 
+                    <button id="redo-btn" class="btn btn-sm btn-outline-secondary">Redo</button> 
+                </div> 
+            </div> 
+            <!-- Add a card-body div with defined height -->
+            <div class="card-body p-0">
+                <div id="gamble-table" class="ht-theme-main"></div>  
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    </script>    
+
+
+    <!-- Edit Amount Modal -->
+    <div id="edit-amount-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>Edit Amounts</h3>
+            <form id="edit-amount-form">
+                <label for="start_amount_edit">Start Amount:</label>
+                <input type="number" id="start_amount_edit" name="start_amount" step="0.01" required><br><br>
+
+                <label for="end_amount_edit">End Amount:</label>
+                <input type="number" id="end_amount_edit" name="end_amount" step="0.01" ><br><br>
+
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/styles/handsontable.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/styles/ht-theme-main.min.css" />
+
+
+    <style>
+        .hot-container {
+            width: 100%;
+            height: 500px;
+            overflow: hidden;
+        }
+
+        .card {
+            width: 100%; /* Ensure the card takes the full width of the container */
+        }
+    </style>
+
+{% endblock %}
+
+{% block extra_body %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.js"></script>
+    <script src="{{ url_for('static', filename='gambling.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+
+{% endblock %}
+

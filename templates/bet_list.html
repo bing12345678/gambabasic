@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Bet Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <h1>Sports Bet Tracker</h1>
+    <a href="{{ url_for('add_bet') }}">Add New Bet</a>
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Bet Type</th>
+                <th>Amount</th>
+                <th>Odds</th>
+                <th>Outcome</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bet in bets %}
+            <tr>
+                <td>{{ bet.Date }}</td>
+                <td>{{ bet['Bet Type'] }}</td>
+                <td>{{ bet.Amount }}</td>
+                <td>{{ bet.Odds }}</td>
+                <td>{{ bet.Outcome }}</td>
+                <td>
+                    <a href="{{ url_for('update_bet', bet_id=loop.index0) }}">Edit</a> | 
+                    <a href="{{ url_for('delete_bet', bet_id=loop.index0) }}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
